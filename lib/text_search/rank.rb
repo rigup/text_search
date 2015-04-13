@@ -15,7 +15,7 @@ module TextSearch
     end
 
     def to_sql
-      "(#{@weight} * ts_rank(#{@document.to_sql}, #{@query.to_sql}))"
+      "#{@weight} * ts_rank(#{@document.to_sql}, #{@query.to_sql})"
     end
   end
 end

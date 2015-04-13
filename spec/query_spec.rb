@@ -11,7 +11,7 @@ describe TextSearch::Query do
     end
 
     it 'has the correct sql' do
-      expect(@query.to_sql).to eq("(to_tsquery('english', '''term'':*'))")
+      expect(@query.to_sql).to eq("to_tsquery('english', '''term'':*')")
     end
   end
 
@@ -25,7 +25,7 @@ describe TextSearch::Query do
     end
 
     it 'has the correct sql' do
-      expect(@query.to_sql).to eq("(to_tsquery('english', '''term'':*') || to_tsquery('english', '''term2'':*') || to_tsquery('english', '''term3'':*'))")
+      expect(@query.to_sql).to eq("to_tsquery('english', '''term'':*') || to_tsquery('english', '''term2'':*') || to_tsquery('english', '''term3'':*')")
     end
   end
 end

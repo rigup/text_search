@@ -12,8 +12,7 @@ module TextSearch
       # to_tsquery('english', "'[query]':*")
       # [query] is in single qoutes to allow special characters
       # :* allows [query] to be a prefix for a term
-      query = @query.map { |q| "to_tsquery('english', '''#{q}'':*')" }.join(' || ')
-      "(#{query})"
+      @query.map { |q| "to_tsquery('english', '''#{q}'':*')" }.join(' || ')
     end
   end
 end
