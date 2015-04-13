@@ -4,6 +4,7 @@ require 'text_search/vector'
 require 'text_search/document'
 require 'text_search/query'
 require 'text_search/rank'
+require 'text_search/rank_group'
 
 module TextSearch
   extend ActiveSupport::Concern
