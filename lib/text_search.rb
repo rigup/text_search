@@ -2,6 +2,7 @@ require 'active_support/concern'
 require 'text_search/scope_options'
 require 'text_search/vector'
 require 'text_search/document'
+require 'text_search/query'
 
 module TextSearch
   extend ActiveSupport::Concern
