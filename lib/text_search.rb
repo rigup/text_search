@@ -1,4 +1,6 @@
+require 'active_support/concern'
 require 'text_search/scope_options'
+require 'text_search/vector'
 module TextSearch
   extend ActiveSupport::Concern
 
