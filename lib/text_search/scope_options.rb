@@ -37,7 +37,7 @@ module TextSearch
     end
 
     def where
-      "((#{@rankings.whole_document.to_sql}) @@ #{@query.to_sql})"
+      "(#{@rankings.whole_document.to_sql}) @@ #{@query.to_sql}"
     end
 
     def parse_options(options)
