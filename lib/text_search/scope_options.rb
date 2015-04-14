@@ -9,7 +9,7 @@ module TextSearch
       weight_vector_map = parse_options options
 
       # Create the pieces needed to make select and where commands
-      @rankings = RankGroup.createFromWeightedHash(weight_vector_map, @query)
+      @rankings = RankGroup.create_from_weighted_hash(weight_vector_map, @query)
 
       # Allow the user to add an arbitrary sql command to the beginning of the rank to boost results
       if options[:boost]
