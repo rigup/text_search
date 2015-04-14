@@ -3,7 +3,7 @@ PATH
   specs:
     text_search (0.0.1)
       activesupport
-      rails (~> 4.2.1)
+      rails (~> 4.2)
 
 GEM
   remote: https://rubygems.org/
