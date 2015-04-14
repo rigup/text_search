@@ -23,6 +23,13 @@ describe TextSearch do
       scope = Parent.all
       expect(scope.no_children('derenge').include? @parent).to eq(false)
     end
+
+    describe 'multiple terms' do
+      it do
+        scope = Parent.all
+        expect(scope.no_children('parent_value_1 parent_value_2').include? @parent).to eq(true)
+      end
+    end
   end
 
   describe 'association search' do

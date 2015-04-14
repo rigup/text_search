@@ -18,7 +18,7 @@ describe TextSearch::ScopeOptions do
         vars = @options.instance_values
         query = "to_tsquery('english', '''Search'':*')"
         select = "1 * ts_rank(to_tsvector('english', coalesce(parents.value_1, '')), to_tsquery('english', '''Search'':*')) + 0.5 * ts_rank(to_tsvector('english', coalesce(parents.value_2, '')), to_tsquery('english', '''Search'':*'))"
-        where = "(to_tsvector('english', coalesce(parents.value_1, '')) || to_tsvector('english', coalesce(parents.value_2, ''))) @@ #{query}"
+        where = "(to_tsvector('english', coalesce(parents.value_1, '')) || to_tsvector('english', coalesce(parents.value_2, ''))) @@ (#{query})"
 
         expect(vars['query'].to_sql).to eq(query)
         expect(@options.send(:rank)).to eq(select)
@@ -41,7 +41,7 @@ describe TextSearch::ScopeOptions do
         vars = @options.instance_values
         query = "to_tsquery('english', '''Search'':*') || to_tsquery('english', '''Two'':*')"
         select = "1 * ts_rank(to_tsvector('english', coalesce(parents.value_1, '')), #{query}) + 0.5 * ts_rank(to_tsvector('english', coalesce(parents.value_2, '')), #{query})"
-        where = "(to_tsvector('english', coalesce(parents.value_1, '')) || to_tsvector('english', coalesce(parents.value_2, ''))) @@ #{query}"
+        where = "(to_tsvector('english', coalesce(parents.value_1, '')) || to_tsvector('english', coalesce(parents.value_2, ''))) @@ (#{query})"
 
         expect(vars['query'].to_sql).to eq(query)
         expect(@options.send(:rank)).to eq(select)
@@ -62,7 +62,7 @@ describe TextSearch::ScopeOptions do
       vars = @options.instance_values
       query = "to_tsquery('english', '''Search'':*')"
       select = "1 * ts_rank(to_tsvector('english', coalesce(parents.value_1, '')) || to_tsvector('english', coalesce(parents.value_2, '')), #{query})"
-      where = "(to_tsvector('english', coalesce(parents.value_1, '')) || to_tsvector('english', coalesce(parents.value_2, ''))) @@ #{query}"
+      where = "(to_tsvector('english', coalesce(parents.value_1, '')) || to_tsvector('english', coalesce(parents.value_2, ''))) @@ (#{query})"
 
       expect(vars['query'].to_sql).to eq(query)
       expect(@options.send(:rank)).to eq(select)
@@ -83,7 +83,7 @@ describe TextSearch::ScopeOptions do
       vars = @options.instance_values
       query = "to_tsquery('english', '''Search'':*')"
       select = "((some sql command) + 1 * ts_rank(to_tsvector('english', coalesce(parents.value_1, '')) || to_tsvector('english', coalesce(parents.value_2, '')), #{query}))"
-      where = "(to_tsvector('english', coalesce(parents.value_1, '')) || to_tsvector('english', coalesce(parents.value_2, ''))) @@ #{query}"
+      where = "(to_tsvector('english', coalesce(parents.value_1, '')) || to_tsvector('english', coalesce(parents.value_2, ''))) @@ (#{query})"
 
       expect(vars['query'].to_sql).to eq(query)
       expect(@options.send(:rank)).to eq(select)
@@ -107,7 +107,7 @@ describe TextSearch::ScopeOptions do
       joins = "LEFT OUTER JOIN (SELECT parents.id as id, string_agg(children.value_1, ' ') as value_1 FROM \"parents\" INNER JOIN \"children\" ON \"children\".\"parent_id\" = \"parents\".\"id\" GROUP BY parents.id) children on children.id = parents.id"
       query = "to_tsquery('english', '''Search'':*')"
       select = "1 * ts_rank(to_tsvector('english', coalesce(parents.value_1, '')) || to_tsvector('english', coalesce(children.value_1, '')), #{query})"
-      where = "(to_tsvector('english', coalesce(parents.value_1, '')) || to_tsvector('english', coalesce(children.value_1, ''))) @@ #{query}"
+      where = "(to_tsvector('english', coalesce(parents.value_1, '')) || to_tsvector('english', coalesce(children.value_1, ''))) @@ (#{query})"
 
       expect(vars['joins'][0].to_sql).to eq(joins)
       expect(vars['query'].to_sql).to eq(query)
