@@ -16,6 +16,8 @@ module TextSearch
       outer_join(sql, @association.to_s)
     end
 
+
+    private
     def outer_join(sql, assoc_alias)
       "LEFT OUTER JOIN (#{sql}) #{assoc_alias} on #{assoc_alias}.id = #{@model.table_name}.id"
     end

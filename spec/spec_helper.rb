@@ -11,8 +11,8 @@ Spork.prefork do
 
   # This file is copied to spec/ when you run 'rails generate rspec:install'
   ENV["RAILS_ENV"] ||= 'test'
-  require File.expand_path("../../test/dummy/config/environment.rb",  __FILE__)
-  ActiveRecord::Migrator.migrations_paths = [File.expand_path("../../test/dummy/db/migrate", __FILE__)]
+  require File.expand_path("../dummy/config/environment.rb",  __FILE__)
+  ActiveRecord::Migrator.migrations_paths = [File.expand_path("../dummy/db/migrate", __FILE__)]
 
   require 'rspec/rails'
   require 'database_cleaner'
@@ -55,8 +55,6 @@ Spork.prefork do
     config.order = "random"
 
     config.before(:suite) do
-      DatabaseCleaner.clean_with(:truncation, {:except => %w[public.schema_migrations]})
-      FactoryGirl.lint
       DatabaseCleaner.clean_with(:truncation, {:except => %w[public.schema_migrations]})
 
       # Clear test logs and temp directory
