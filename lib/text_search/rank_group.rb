@@ -4,7 +4,7 @@ module TextSearch
       @ranks = Array(ranks)
     end
 
-    def self.createFromWeightedHash(weight_vector_map, query)
+    def self.create_from_weighted_hash(weight_vector_map, query)
       rankings = RankGroup.new
       weight_vector_map.each do |weight, vectors|
         document = TextSearch::Document.new(vectors)
