@@ -1,3 +1,9 @@
-= TextSearch
+= [TextSearch](https://github.com/rigup/text_search/)
+
+= Intro
+
+TextSearch was written to easily take advantage of PostgresSQL's full-text search capabilities with limited setup.
+Inspiration was derived from [pg_search](http://github.com/Casecommons/pg_search/) and
+["Postgres full-text search is Good Enough"](http://blog.lostpropertyhq.com/postgres-full-text-search-is-good-enough/) by [Lost Property](http://blog.lostpropertyhq.com/).
 
 This project rocks and uses MIT-LICENSE.
