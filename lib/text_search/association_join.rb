@@ -23,12 +23,7 @@ module TextSearch
     end
 
     def foreign_key
-      association = find_association(@association, @model)
-      if association.is_a? ActiveRecord::Reflection::HasManyReflection
-        association.foreign_key
-      else
         'id'
-      end
     end
 
     # Changes a symbol into a class
