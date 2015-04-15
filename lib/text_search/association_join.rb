@@ -19,7 +19,16 @@ module TextSearch
 
     private
     def outer_join(sql, assoc_alias)
-      "LEFT OUTER JOIN (#{sql}) #{assoc_alias} on #{assoc_alias}.id = #{@model.table_name}.id"
+      "LEFT OUTER JOIN (#{sql}) #{assoc_alias} on #{assoc_alias}.id = #{@model.table_name}.#{foreign_key}"
+    end
+
+    def foreign_key
+      association = find_association(@association, @model)
+      if association.is_a? ActiveRecord::Reflection::HasManyReflection
+        association.foreign_key
+      else
+        'id'
+      end
     end
 
     # Changes a symbol into a class
@@ -30,10 +39,15 @@ module TextSearch
         name.singularize.classify.constantize
       else
         # If it isn't defined, this means that the attribute is a renamed version of a class
-        parent_class.reflect_on_all_associations.each do |assoc|
-          if assoc.name.to_s == name
-            return assoc.class_name.classify.constantize
-          end
+        find_association(symbol, parent_class).class_name.classify.constantize
+      end
+    end
+
+    def find_association(symbol, parent_class)
+      name = symbol.to_s
+      parent_class.reflect_on_all_associations.each do |assoc|
+        if assoc.name.to_s == name
+          return assoc
         end
       end
     end
