@@ -1,7 +1,8 @@
 module TextSearch
   class Query
     def initialize(query)
-      @query = Array(query).map {|n| n.split(' ')}.flatten
+      query = query.gsub /['?\\:]/, ''
+      @query = Array(query).map {|n| n.split(' ')}.flatten.map { |q| "'#{ActiveRecord::Base.connection.quote(q)}'"}
     end
 
     def query
@@ -12,7 +13,7 @@ module TextSearch
       # to_tsquery('english', "'[query]':*")
       # [query] is in single qoutes to allow special characters
       # :* allows [query] to be a prefix for a term
-      @query.map { |q| "to_tsquery('english', '''#{q}'':*')" }.join(' || ')
+      @query.map { |q| "to_tsquery('english', '#{q}:*')" }.join(' || ')
     end
   end
 end

@@ -48,4 +48,9 @@ describe TextSearch do
       expect(scope.children_equal('parent_value_1').include? @parent).to eq(false)
     end
   end
+
+  it 'allows special characters' do
+    scope = Parent.all
+    expect(scope.children_equal("parent_value_1 '?\\:").include? @parent).to eq(false)
+  end
 end
