@@ -10,7 +10,7 @@ module TextSearch
 
     def to_sql
       options_as = @attributes.map { |attribute| "string_agg(#{@association.table_name}.#{attribute}, ' ') as #{attribute}" }.join ', '
-      sql = @association.klass.unscoped.select("#{primary_key} as id, #{options_as}").group(primary_key).to_sql
+      sql = @model.unscoped.joins(@alias.to_sym).select("#{primary_key} as id, #{options_as}").group(primary_key).to_sql
       outer_join(sql)
     end
 
