@@ -23,8 +23,9 @@ module TextSearch
     end
 
     def select
+      klass = symbol_to_constant_class(@association, @model)
       association = find_association(@association, @model)
-      if association.is_a? ActiveRecord::Reflection::BelongsToReflection
+      if association.is_a? ActiveRecord::Reflection::HasAndBelongsToManyReflection or association.is_a? ActiveRecord::Reflection::HasManyReflection or association.is_a? ActiveRecord::Reflection::HasOneReflection
         "#{klass.table_name}.#{association.foreign_key}"
       else
         "#{@model.table_name}.id"
