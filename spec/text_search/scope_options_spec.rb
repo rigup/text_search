@@ -104,7 +104,7 @@ describe TextSearch::ScopeOptions do
 
     it 'should have the appropriate groupings' do
       vars = @options.instance_values
-      joins = "LEFT OUTER JOIN (SELECT children.parent_id as id, string_agg(children.value_1, ' ') as value_1 FROM \"parents\" INNER JOIN \"children\" ON \"children\".\"parent_id\" = \"parents\".\"id\" GROUP BY parents.id) children on children.id = parents.id"
+      joins = "LEFT OUTER JOIN (SELECT children.parent_id as id, string_agg(children.value_1, ' ') as value_1 FROM \"parents\" INNER JOIN \"children\" ON \"children\".\"parent_id\" = \"parents\".\"id\" GROUP BY children.parent_id) children on children.id = parents.id"
       query = "to_tsquery('english', '''Search'':*')"
       select = "1 * ts_rank(to_tsvector('english', coalesce(parents.value_1, '')) || to_tsvector('english', coalesce(children.value_1, '')), #{query})"
       where = "(to_tsvector('english', coalesce(parents.value_1, '')) || to_tsvector('english', coalesce(children.value_1, ''))) @@ (#{query})"
