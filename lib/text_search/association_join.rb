@@ -23,8 +23,7 @@ module TextSearch
 
     def primary_key
       foreign_reflections = [ActiveRecord::Reflection::HasOneReflection,
-                             ActiveRecord::Reflection::HasManyReflection,
-                             ActiveRecord::Reflection::HasAndBelongsToManyReflection]
+                             ActiveRecord::Reflection::HasManyReflection]
       if foreign_reflections.include? @association.class
         "#{@association.table_name}.#{@association.foreign_key}"
       else
