@@ -7,7 +7,7 @@ describe TextSearch::Query do
     end
 
     it 'has the right query' do
-      expect(@query.query).to eq(%w(term))
+      expect(@query.query).to eq(%w(''term''))
     end
 
     it 'has the correct sql' do
@@ -21,7 +21,7 @@ describe TextSearch::Query do
     end
 
     it 'has the right query' do
-      expect(@query.query).to eq(%w(term term2 term3))
+      expect(@query.query).to eq(%w(''term'' ''term2'' ''term3''))
     end
 
     it 'has the correct sql' do

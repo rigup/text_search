@@ -11,19 +11,24 @@ module TextSearch
       klass = symbol_to_constant_class(@association, @model)
       options_as = @attributes.map { |attribute| "string_agg(#{klass.table_name}.#{attribute}, ' ') as #{attribute}" }.join ', '
       sql = @model.unscoped.joins(@association)
-      .select("#{@model.table_name}.id as id, #{options_as}")
-      .group("#{@model.table_name}.id").to_sql
+      .select("#{klass.table_name}.#{foreign_key} as id, #{options_as}")
+      .group("#{klass.table_name}.#{foreign_key}").to_sql
       outer_join(sql, @association.to_s)
     end
 
 
     private
     def outer_join(sql, assoc_alias)
-      "LEFT OUTER JOIN (#{sql}) #{assoc_alias} on #{assoc_alias}.id = #{@model.table_name}.#{foreign_key}"
+      "LEFT OUTER JOIN (#{sql}) #{assoc_alias} on #{assoc_alias}.id = #{@model.table_name}.id"
     end
 
     def foreign_key
+      association = find_association(@association, @model)
+      if association.is_a? ActiveRecord::Reflection::HasManyReflection
+        association.foreign_key
+      else
         'id'
+      end
     end
 
     # Changes a symbol into a class
