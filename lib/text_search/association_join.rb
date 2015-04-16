@@ -11,8 +11,8 @@ module TextSearch
       klass = symbol_to_constant_class(@association, @model)
       options_as = @attributes.map { |attribute| "string_agg(#{klass.table_name}.#{attribute}, ' ') as #{attribute}" }.join ', '
       sql = @model.unscoped.joins(@association)
-      .select("#{klass.table_name}.#{foreign_key} as id, #{options_as}")
-      .group("#{klass.table_name}.#{foreign_key}").to_sql
+      .select("#{select} as id, #{options_as}")
+      .group("#{select}").to_sql
       outer_join(sql, @association.to_s)
     end
 
@@ -22,12 +22,12 @@ module TextSearch
       "LEFT OUTER JOIN (#{sql}) #{assoc_alias} on #{assoc_alias}.id = #{@model.table_name}.id"
     end
 
-    def foreign_key
+    def select
       association = find_association(@association, @model)
-      if association.is_a? ActiveRecord::Reflection::HasManyReflection
-        association.foreign_key
+      if association.is_a? ActiveRecord::Reflection::BelongsToReflection
+        "#{klass.table_name}.#{association.foreign_key}"
       else
-        'id'
+        "#{@model.table_name}.id"
       end
     end
 
