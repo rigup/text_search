@@ -27,7 +27,7 @@ module TextSearch
       if foreign_reflections.include? @association.class
         "#{@association.table_name}.#{@association.foreign_key}"
       else
-        "#{@association.table_name}.id"
+        "#{@model.table_name}.id"
       end
     end
 
