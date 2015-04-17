@@ -3,23 +3,32 @@ module TextSearch
 
     def initialize(model, association, attributes)
       @model = model
-      @association = association
+      @alias = association.to_s
+      @association = find_association(association, @model)
       @attributes = attributes
     end
 
     def to_sql
-      klass = symbol_to_constant_class(@association, @model)
-      options_as = @attributes.map { |attribute| "string_agg(#{klass.table_name}.#{attribute}, ' ') as #{attribute}" }.join ', '
-      sql = @model.unscoped.joins(@association)
-      .select("#{@model.table_name}.id as id, #{options_as}")
-      .group("#{@model.table_name}.id").to_sql
-      outer_join(sql, @association.to_s)
+      options_as = @attributes.map { |attribute| "string_agg(#{@association.table_name}.#{attribute}, ' ') as #{attribute}" }.join ', '
+      sql = @model.unscoped.joins(@alias.to_sym).select("#{primary_key} as id, #{options_as}").group(primary_key).to_sql
+      outer_join(sql)
     end
 
 
     private
-    def outer_join(sql, assoc_alias)
-      "LEFT OUTER JOIN (#{sql}) #{assoc_alias} on #{assoc_alias}.id = #{@model.table_name}.id"
+    def outer_join(sql)
+      "LEFT OUTER JOIN (#{sql}) #{@alias} on #{@alias}.id = #{@model.table_name}.id"
+    end
+
+
+    def primary_key
+      foreign_reflections = [ActiveRecord::Reflection::HasOneReflection,
+                             ActiveRecord::Reflection::HasManyReflection]
+      if foreign_reflections.include? @association.class
+        "#{@association.table_name}.#{@association.foreign_key}"
+      else
+        "#{@model.table_name}.id"
+      end
     end
 
     # Changes a symbol into a class
