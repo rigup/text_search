@@ -25,7 +25,7 @@ module TextSearch
       foreign_reflections = [ActiveRecord::Reflection::HasOneReflection,
                              ActiveRecord::Reflection::HasManyReflection]
       if foreign_reflections.include? @association.class
-        if @association.table_name equal? @model.table_name
+        if @association.table_name == @model.table_name
           "#{@association.plural_name}_#{@association.table_name}.#{@association.foreign_key}"
         else
           "#{@association.table_name}.#{@association.foreign_key}"
