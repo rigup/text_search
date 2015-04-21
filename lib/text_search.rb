@@ -25,4 +25,14 @@ module TextSearch
       define_singleton_method name, &method
     end
   end
+
+  def method_missing(symbol, *args)
+    case symbol
+      when :rank
+        raise StandardError.new unless respond_to?(:rank)
+        read_attribute(:rank).to_f
+      else
+        super
+    end
+  end
 end
