@@ -9,7 +9,7 @@ module TextSearch
     end
 
     def to_sql
-      options_as = @attributes.map { |attribute| "string_agg(#{@association.table_name}.#{attribute}, ' ') as #{attribute}" }.join ', '
+      options_as = @attributes.map { |attribute| "string_agg(#{table_name}.#{attribute}, ' ') as #{attribute}" }.join ', '
       sql = @model.unscoped.joins(@alias.to_sym).select("#{primary_key} as id, #{options_as}").group(primary_key).to_sql
       outer_join(sql)
     end
@@ -25,9 +25,23 @@ module TextSearch
       foreign_reflections = [ActiveRecord::Reflection::HasOneReflection,
                              ActiveRecord::Reflection::HasManyReflection]
       if foreign_reflections.include? @association.class
-        "#{@association.table_name}.#{@association.foreign_key}"
+        if @association.table_name == @model.table_name
+          "#{table_name}.#{@association.foreign_key}"
+        else
+          "#{table_name}.#{@association.foreign_key}"
+        end
       else
         "#{@model.table_name}.id"
+      end
+    end
+
+    def table_name
+      foreign_reflections = [ActiveRecord::Reflection::HasOneReflection,
+                             ActiveRecord::Reflection::HasManyReflection]
+      if foreign_reflections.include? @association.class and @association.table_name == @model.table_name
+        "#{@association.plural_name}_#{@association.table_name}"
+      else
+        "#{@association.table_name}"
       end
     end
 
