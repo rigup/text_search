@@ -16,5 +16,9 @@ module TextSearch
     def to_sql
       "to_tsvector('english', coalesce(#{@table}.#{@name}, ''))"
     end
+
+    def to_s
+      "#{@table}.#{@name}"
+    end
   end
 end

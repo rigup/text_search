@@ -7,4 +7,15 @@ class Parent < ActiveRecord::Base
   text_search_scope :children_equal, associated_against: {
       children: [:value_1, :value_2]
   }
+
+  text_search_scope :highlight_equal, associated_against: {
+      children: [:value_1, :value_2]
+  }, highlight: true
+
+  text_search_scope :highlight_unequal, associated_against: {
+      children: {
+          value_1: 1,
+          value_2: 2,
+      }
+  }, highlight: true
 end

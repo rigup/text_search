@@ -5,6 +5,7 @@ module TextSearch
       @joins = []
       @boost = options[:boost]
       @query = Query.new(options[:query])
+      @highlight = options[:highlight]
 
       weight_vector_map = parse_options options
 
@@ -24,7 +25,11 @@ module TextSearch
       end
 
       # Order by highest rank
-      scope.order('rank DESC').select("#{@model.table_name}.*").select("#{rank} AS rank").where(where)
+      scope = scope.order('rank DESC').select("#{@model.table_name}.*").select("#{rank} AS rank").where(where)
+      if @highlight
+        scope = scope.select(highlight)
+      end
+      scope
     end
 
     private
@@ -38,6 +43,10 @@ module TextSearch
 
     def where
       "(#{@rankings.whole_document.to_sql}) @@ (#{@query.to_sql})"
+    end
+
+    def highlight
+      "ts_headline('english', #{@rankings.whole_document.to_s}, #{@query.to_sql}) AS headline"
     end
 
     def parse_options(options)
