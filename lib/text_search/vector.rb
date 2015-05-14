@@ -18,7 +18,7 @@ module TextSearch
     end
 
     def to_s
-      "#{@table}.#{@name}"
+      "coalesce(#{@table}.#{@name}, '')"
     end
   end
 end
