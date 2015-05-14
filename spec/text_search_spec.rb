@@ -57,7 +57,7 @@ describe TextSearch do
   describe 'highlight search' do
     it 'highlights for equal rank value' do
       scope = Parent.all
-      expect(scope.highlight_equal('child').first.headline).to eq('<b>child</b>_1_value_1 <b>child</b>_2_value_1 <b>child</b>_1_value_2 <b>child</b>_2_value')
+      expect(scope.highlight_equal('child').first.children_value_1_highlight).to eq('<b>child</b>_1_value_1 <b>child</b>_2_value_1 <b>child</b>_1_value_2 <b>child</b>_2_value')
     end
 
     it 'highlights for unequal rank value' do

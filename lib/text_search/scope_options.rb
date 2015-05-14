@@ -7,10 +7,10 @@ module TextSearch
       @query = Query.new(options[:query])
       @highlight = options[:highlight]
 
-      weight_vector_map = parse_options options
+      @weight_vector_map = parse_options options
 
       # Create the pieces needed to make select and where commands
-      @rankings = RankGroup.create_from_weighted_hash(weight_vector_map, @query)
+      @rankings = RankGroup.create_from_weighted_hash(@weight_vector_map, @query)
 
       # Allow the user to add an arbitrary sql command to the beginning of the rank to boost results
       if options[:boost]
@@ -27,7 +27,11 @@ module TextSearch
       # Order by highest rank
       scope = scope.order('rank DESC').select("#{@model.table_name}.*").select("#{rank} AS rank").where(where)
       if @highlight
-        scope = scope.select(highlight)
+        @weight_vector_map.each do |weight, vectors|
+          vectors.each do |vector|
+            scope = scope.select("#{highlight(vector)} AS #{vector.table}_#{vector.name}_highlight")
+          end
+        end
       end
       scope
     end
@@ -45,8 +49,8 @@ module TextSearch
       "(#{@rankings.whole_document.to_sql}) @@ (#{@query.to_sql})"
     end
 
-    def highlight
-      "ts_headline('english', #{@rankings.whole_document.to_s}, #{@query.to_sql}) AS headline"
+    def highlight(vector)
+      "ts_headline('english', #{vector.to_s}, #{@query.to_sql})"
     end
 
     def parse_options(options)
