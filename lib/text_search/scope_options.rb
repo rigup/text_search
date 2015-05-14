@@ -50,7 +50,7 @@ module TextSearch
     end
 
     def highlight(vector)
-      "ts_headline('english', #{vector.to_s}, #{@query.to_sql})"
+      "ts_headline('english', #{vector.to_s}, #{@query.to_sql}, FragmentDelimiter=\" ... \")"
     end
 
     def parse_options(options)
