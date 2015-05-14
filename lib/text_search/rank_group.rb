@@ -22,6 +22,10 @@ module TextSearch
       @ranks.map { |rank| rank.to_sql }.join(' + ')
     end
 
+    def to_s
+      @ranks.map { |rank| rank.to_s }.join(' || ')
+    end
+
     def whole_document
       Array(@ranks).map { |ranking| ranking.document }.inject { |documents, document| documents + document }
     end
