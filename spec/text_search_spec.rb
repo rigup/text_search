@@ -54,6 +54,11 @@ describe TextSearch do
     expect(scope.children_equal("parent_value_1 '?\\:").include? @parent).to eq(false)
   end
 
+  it 'allows just special characters' do
+    scope = Parent.all
+    expect(scope.children_equal("'").include? @parent).to eq(false)
+  end
+
   describe 'highlight search' do
     it 'highlights for equal rank value' do
       scope = Parent.all
