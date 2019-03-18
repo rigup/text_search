@@ -14,9 +14,9 @@ module TextSearch
       # [query] is in single qoutes to allow special characters
       # :* allows [query] to be a prefix for a term
       if @query.size == 0
-        "to_tsquery('english', '')"
+        "to_tsquery('english_no_stop_words', '')"
       else
-        @query.map { |q| "to_tsquery('english', '#{q}:*')" }.join(' || ')
+        @query.map { |q| "to_tsquery('english_no_stop_words', '#{q}:*')" }.join(' || ')
       end
     end
   end

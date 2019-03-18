@@ -18,4 +18,13 @@ class Parent < ActiveRecord::Base
           value_2: 2,
       }
   }, highlight: true
+
+  scope :english_no_stop_words, -> {
+    ActiveRecord::Base.connection.execute('
+      CREATE TEXT SEARCH DICTIONARY english_no_stop_words (TEMPLATE = pg_catalog.english_stem);
+      CREATE TEXT SEARCH CONFIGURATION english_no_stop_words (PARSER = default);
+      ALTER TEXT SEARCH CONFIGURATION english_no_stop_words
+        ALTER MAPPING FOR asciiword, asciihword, hword_asciipart, hword, hword_part, word WITH english_no_stop_words;'
+    );
+  }
 end
