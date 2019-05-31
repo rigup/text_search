@@ -18,7 +18,6 @@ Gem::Specification.new do |s|
   s.test_files = Dir["test/**/*"]
 
   s.add_dependency "rails",                         ">= 4.2", "< 6.0"
-  s.add_dependency "activesupport"
 
   s.add_development_dependency "pg",                "~> 1.1.4"
   s.add_development_dependency "rspec",             "~> 3.8.0"

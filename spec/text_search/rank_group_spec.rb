@@ -21,7 +21,7 @@ describe TextSearch::RankGroup do
   end
 
   it 'has the correct sql' do
-    expect(@rank_group.to_sql).to eql("1 * ts_rank(to_tsvector('english', coalesce(table0.name0, '')), to_tsquery('english', '''term'':*')) + 2 * ts_rank(to_tsvector('english', coalesce(table1.name1, '')), to_tsquery('english', '''term'':*'))")
+    expect(@rank_group.to_sql).to eql("1 * ts_rank(to_tsvector('english', coalesce(table0.name0, '')), to_tsquery('english_no_stop_words', '''term'':*')) + 2 * ts_rank(to_tsvector('english', coalesce(table1.name1, '')), to_tsquery('english_no_stop_words', '''term'':*'))")
   end
 
   it 'has the whole document' do
@@ -46,7 +46,7 @@ describe TextSearch::RankGroup do
     end
 
     it do
-      expect(@rank_group.to_sql).to eql("1 * ts_rank(to_tsvector('english', coalesce(table0.name0, '')), to_tsquery('english', '''term'':*')) + 2 * ts_rank(to_tsvector('english', coalesce(table1.name1, '')), to_tsquery('english', '''term'':*'))")
+      expect(@rank_group.to_sql).to eql("1 * ts_rank(to_tsvector('english', coalesce(table0.name0, '')), to_tsquery('english_no_stop_words', '''term'':*')) + 2 * ts_rank(to_tsvector('english', coalesce(table1.name1, '')), to_tsquery('english_no_stop_words', '''term'':*'))")
     end
 
   end
