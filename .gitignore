@@ -16,3 +16,4 @@ doc/
 .idea
 .secret
 spec/dummy/local.rb
+Gemfile.lock
