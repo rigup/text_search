@@ -16,8 +16,8 @@ describe TextSearch::ScopeOptions do
 
       it 'should have the appropriate groupings' do
         vars = @options.instance_values
-        query = "to_tsquery('english', '''Search'':*')"
-        select = "1 * ts_rank(to_tsvector('english', coalesce(parents.value_1, '')), to_tsquery('english', '''Search'':*')) + 0.5 * ts_rank(to_tsvector('english', coalesce(parents.value_2, '')), to_tsquery('english', '''Search'':*'))"
+        query = "to_tsquery('english_no_stop_words', '''Search'':*')"
+        select = "1 * ts_rank(to_tsvector('english', coalesce(parents.value_1, '')), to_tsquery('english_no_stop_words', '''Search'':*')) + 0.5 * ts_rank(to_tsvector('english', coalesce(parents.value_2, '')), to_tsquery('english_no_stop_words', '''Search'':*'))"
         where = "(to_tsvector('english', coalesce(parents.value_1, '')) || to_tsvector('english', coalesce(parents.value_2, ''))) @@ (#{query})"
 
         expect(vars['query'].to_sql).to eq(query)
@@ -39,7 +39,7 @@ describe TextSearch::ScopeOptions do
 
       it 'should have the appropriate groupings' do
         vars = @options.instance_values
-        query = "to_tsquery('english', '''Search'':*') || to_tsquery('english', '''Two'':*')"
+        query = "to_tsquery('english_no_stop_words', '''Search'':*') || to_tsquery('english_no_stop_words', '''Two'':*')"
         select = "1 * ts_rank(to_tsvector('english', coalesce(parents.value_1, '')), #{query}) + 0.5 * ts_rank(to_tsvector('english', coalesce(parents.value_2, '')), #{query})"
         where = "(to_tsvector('english', coalesce(parents.value_1, '')) || to_tsvector('english', coalesce(parents.value_2, ''))) @@ (#{query})"
 
@@ -60,7 +60,7 @@ describe TextSearch::ScopeOptions do
 
     it 'should have the appropriate groupings' do
       vars = @options.instance_values
-      query = "to_tsquery('english', '''Search'':*')"
+      query = "to_tsquery('english_no_stop_words', '''Search'':*')"
       select = "1 * ts_rank(to_tsvector('english', coalesce(parents.value_1, '')) || to_tsvector('english', coalesce(parents.value_2, '')), #{query})"
       where = "(to_tsvector('english', coalesce(parents.value_1, '')) || to_tsvector('english', coalesce(parents.value_2, ''))) @@ (#{query})"
 
@@ -81,7 +81,7 @@ describe TextSearch::ScopeOptions do
 
     it 'should have the appropriate groupings' do
       vars = @options.instance_values
-      query = "to_tsquery('english', '''Search'':*')"
+      query = "to_tsquery('english_no_stop_words', '''Search'':*')"
       select = "((some sql command) + 1 * ts_rank(to_tsvector('english', coalesce(parents.value_1, '')) || to_tsvector('english', coalesce(parents.value_2, '')), #{query}))"
       where = "(to_tsvector('english', coalesce(parents.value_1, '')) || to_tsvector('english', coalesce(parents.value_2, ''))) @@ (#{query})"
 
@@ -105,7 +105,7 @@ describe TextSearch::ScopeOptions do
     it 'should have the appropriate groupings' do
       vars = @options.instance_values
       joins = "LEFT OUTER JOIN (SELECT children.parent_id as id, string_agg(children.value_1, ' ') as value_1 FROM \"parents\" INNER JOIN \"children\" ON \"children\".\"parent_id\" = \"parents\".\"id\" GROUP BY children.parent_id) children on children.id = parents.id"
-      query = "to_tsquery('english', '''Search'':*')"
+      query = "to_tsquery('english_no_stop_words', '''Search'':*')"
       select = "1 * ts_rank(to_tsvector('english', coalesce(parents.value_1, '')) || to_tsvector('english', coalesce(children.value_1, '')), #{query})"
       where = "(to_tsvector('english', coalesce(parents.value_1, '')) || to_tsvector('english', coalesce(children.value_1, ''))) @@ (#{query})"
 

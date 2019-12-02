@@ -18,6 +18,6 @@ describe TextSearch::Rank do
   end
 
   it 'has the correct sql' do
-    expect(@rank.to_sql).to eql("1 * ts_rank(to_tsvector('english', coalesce(table.name, '')), to_tsquery('english', '''term'':*'))")
+    expect(@rank.to_sql).to eql("1 * ts_rank(to_tsvector('english', coalesce(table.name, '')), to_tsquery('english_no_stop_words', '''term'':*'))")
   end
 end
